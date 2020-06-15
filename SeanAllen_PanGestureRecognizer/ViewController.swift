@@ -20,9 +20,11 @@ class ViewController: UIViewController {
         
         addPanGesture(view: fileImageView)
         fileViewOrigin = fileImageView.frame.origin
-        
         view.bringSubviewToFront(fileImageView)
-    }
+        
+        trashImageView.isUserInteractionEnabled = true
+        addTapGesture()
+        }
 
     func addPanGesture(view: UIView) {
         
@@ -79,3 +81,19 @@ class ViewController: UIViewController {
     }
 }
 
+extension ViewController {
+    func addTapGesture() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.clearBin))
+        self.trashImageView.addGestureRecognizer(tap)
+    }
+    
+    @objc func clearBin() {
+        if self.trashImageView.image == UIImage(named: "fullRecycleBinIcon") {
+            UIView.animate(withDuration: 0.3) {
+                self.trashImageView.image = UIImage(named: "freeRecycleBinIcon")
+                self.fileImageView.frame.origin = self.fileViewOrigin
+                self.fileImageView.alpha = 1.0
+            }
+        }
+    }
+}
