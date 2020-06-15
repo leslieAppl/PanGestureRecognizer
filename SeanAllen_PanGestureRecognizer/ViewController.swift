@@ -34,37 +34,49 @@ class ViewController: UIViewController {
     @objc func handlePan(sender: UIPanGestureRecognizer) {
         
         let fileView = sender.view!
-        let translation = sender.translation(in: view)
         
         switch sender.state {
         case .began, .changed:
-            
-            /// Tracking target view's routes corresponding to the pan gesture translation in the coordinate system of the specified view.
-            fileView.center = CGPoint(x: fileView.center.x+translation.x, y: fileView.center.y+translation.y)
-            
-            /// Resetting translation value to zero after pan gesture finished.
-            sender.setTranslation(CGPoint.zero, in: view)
+            moveViewWithPan(view: fileView, sender: sender)
             
         case .ended:
             
             if fileView.frame.intersects(trashImageView.frame) {
-                
-                UIView.animate(withDuration: 0.0) {
-                    self.fileImageView.alpha = 0.0
-                    self.trashImageView.image = UIImage(named: "fullRecycleBinIcon")
-                }
+                deleteView(view: fileView)
             }
             else {
-                UIView.animate(withDuration: 0.3) {
-                    fileView.frame.origin = self.fileViewOrigin
-                }
+                returnViewToOrigin(view: fileView)
             }
             
             
         default:
             break
         }
+    }
+    
+    func moveViewWithPan(view: UIView, sender: UIPanGestureRecognizer) {
         
+        let translation = sender.translation(in: view)
+        
+        /// Tracking target view's routes corresponding to the pan gesture translation in the coordinate system of the specified view.
+        view.center = CGPoint(x: view.center.x+translation.x, y: view.center.y+translation.y)
+        
+        /// Resetting translation value to zero after pan gesture finished.
+        sender.setTranslation(CGPoint.zero, in: view)
+
+    }
+    
+    func returnViewToOrigin(view: UIView) {
+        UIView.animate(withDuration: 0.3) {
+            view.frame.origin = self.fileViewOrigin
+        }
+    }
+    
+    func deleteView(view: UIView) {
+        UIView.animate(withDuration: 0.0) {
+            view.alpha = 0.0
+            self.trashImageView.image = UIImage(named: "fullRecycleBinIcon")
+        }
     }
 }
 
