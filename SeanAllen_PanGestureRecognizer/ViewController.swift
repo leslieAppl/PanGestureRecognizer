@@ -48,7 +48,6 @@ class ViewController: UIViewController {
                 returnViewToOrigin(view: fileView)
             }
             
-            
         default:
             break
         }
@@ -58,7 +57,7 @@ class ViewController: UIViewController {
         
         let translation = sender.translation(in: view)
         
-        /// Tracking target view's routes corresponding to the pan gesture translation in the coordinate system of the specified view.
+        /// Tracking target view's routing corresponding to the pan gesture translation in the coordinate system of the specified view.
         view.center = CGPoint(x: view.center.x+translation.x, y: view.center.y+translation.y)
         
         /// Resetting translation value to zero after pan gesture finished.
